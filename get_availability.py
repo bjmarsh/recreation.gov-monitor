@@ -40,7 +40,7 @@ def get_by_date(camp_id, date):
     return sites
 
 year, month, day = tuple(int(x) for x in sys.argv[1:])
-email = "bmarsh9311@gmail.com"
+email = "XXX@gmail.com"
 date = dt.date(year,month,day)
 camp_ids = {
     # 231880: "Difficult Campground",
