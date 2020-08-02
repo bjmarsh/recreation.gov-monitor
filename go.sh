@@ -4,16 +4,16 @@ echo;echo
 echo "*************************************************"
 date
 echo "*************************************************"
-cd /home/users/bemarsh
+cd /home/bennett
 echo "Running bashrc..."
 source .bashrc
 echo "python location is:"
 which python
-cd /home/users/bemarsh/scripts/recreation
+cd /home/bennett/recreation
 echo "Running script..."
-python get_availability.py 2020 10 2 2>&1
-python get_availability.py 2020 10 3 2>&1
+python3 get_availability.py 2020 10 2 2>&1
+python3 get_availability.py 2020 10 3 2>&1
 
 if [ $? != 0 ]; then
-    tail -n 20 cronlog.txt | mail -s "ERROR: recreation.gov script crashed!!" bmarsh9311@gmail.com
+    tail -n 20 cronlog.txt | python3 ses.py "ERROR: recreation.gov script crashed!!"
 fi

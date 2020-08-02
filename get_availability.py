@@ -2,6 +2,7 @@ import os,sys
 import datetime as dt
 import requests
 import json
+from ses import send_email
 
 def get_by_date(camp_id, date):
     headers = {
@@ -25,7 +26,7 @@ def get_by_date(camp_id, date):
     # print r.text
 
     if r.status_code != 200:
-        print r.text
+        print(r.text)
         raise Exception("ERROR! status code {0}. See text above.".format(r.status_code))
 
     data = json.loads(r.text)
@@ -40,7 +41,6 @@ def get_by_date(camp_id, date):
     return sites
 
 year, month, day = tuple(int(x) for x in sys.argv[1:])
-email = "XXX@gmail.com"
 date = dt.date(year,month,day)
 camp_ids = {
     # 231880: "Difficult Campground",
@@ -50,7 +50,7 @@ camp_ids = {
     }
 avail = []
 for camp_id, name in camp_ids.items():
-    print "Getting availability for {0} ({1}) on date {2}".format(name, camp_id, date)
+    print("Getting availability for {0} ({1}) on date {2}".format(name, camp_id, date))
     sites = get_by_date(camp_id, date)
     for site,info in sites.items():
         if info["availability"] == "Available" and info["type"] != "RV ELECTRIC":
@@ -63,6 +63,7 @@ for av in avail:
 for camp_id in camp_ids:
     s += "\nhttps://www.recreation.gov/camping/campgrounds/{0}/availability\n".format(camp_id)
 
-print s
+print(s)
 if len(avail) > 0:
-    os.system("printf \"{0}\" | mail -s 'Campgrounds available {1}' {2}".format(s.replace('\n','\\n'), date, email))
+    # os.system("printf \"{0}\" | mail -s 'Campgrounds available {1}' {2}".format(s.replace('\n','\\n'), date, email))
+    send_email("Campgrounds available {0}".format(date), s)
